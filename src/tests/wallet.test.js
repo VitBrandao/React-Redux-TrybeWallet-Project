@@ -66,7 +66,7 @@ describe.only('3 - Crie um header para a página de carteira contendo as seguint
   });
 });
 
-describe('4 - Desenvolva um formulário para adicionar uma despesa contendo as seguintes características:', () => {
+describe.only('4 - Desenvolva um formulário para adicionar uma despesa contendo as seguintes características:', () => {
   test('Um campo para adicionar o valor da despesa', async () => {
     renderWithRouterAndStore(<Wallet />, '/carteira');
     const valueInput = await screen.findByTestId(VALUE_INPUT_TEST_ID);
