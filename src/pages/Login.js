@@ -22,9 +22,10 @@ class Login extends React.Component {
       email: target.value,
     });
 
-    // Encontrei essa forma de validar email aqui:
+    // Aprendi essa forma de validar email aqui:
     // https://www.w3resource.com/javascript/form/email-validation.php
-    const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; 
+
+    const mailformat = /(^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$)/ig;
 
     if (target.value.match(mailformat)) {
       this.setState({
