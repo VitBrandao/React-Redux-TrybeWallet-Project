@@ -24,6 +24,8 @@ class Login extends React.Component {
 
     // Aprendi essa forma de validar email aqui:
     // https://www.w3resource.com/javascript/form/email-validation.php
+    // E a melhor opção para passar o requisito e driblar o lint, achei aqui:
+    // https://bit.ly/3f8WQqD (Stack Overflow - link encurtado)
 
     const mailformat = /\S+@\S+\.\S+/;
 
@@ -103,6 +105,11 @@ class Login extends React.Component {
 Login.propTypes = {
   dispatchToAction: PropTypes.func.isRequired,
   history: PropTypes.string.isRequired,
+  // history: PropTypes.shape({
+  //   length: PropTypes.number.isRequired,
+  //   scrollRestoration: PropTypes.string.isRequired,
+  //   state: PropTypes.string.isRequired,
+  // }).isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
