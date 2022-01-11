@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { fetchCurrency, walletAction } from '../actions';
 
 class Wallet extends React.Component {
   constructor() {
     super();
     this.state = {
-      id: '',
+      id: 0,
       value: '0',
       description: '',
       currency: '',
@@ -21,20 +22,32 @@ class Wallet extends React.Component {
     this.onInputChange = this.onInputChange.bind(this);
   }
 
-  addExpense() {
-    // Primeiro, atualizando valor total 
-    const { value, totalValue } = this.state;
-    this.setState({
-      buttonClicked: true,
-      totalValue: Number(totalValue) + Number(value), 
-    });
-  };
+  componentDidMount() {
+    const { dispatchToFetch } = this.props;
+    const fetchResults = dispatchToFetch();
+    console.log(fetchResults);
+  }
 
-  onInputChange({ target }){
+  onInputChange({ target }) {
     const { name, value } = target;
     this.setState({
       [name]: value,
     });
+  }
+
+  // Funçao do clique do botão
+  addExpense() {
+    // Primeiro, atualizando valor total
+    const { value, totalValue, id } = this.state;
+    this.setState({
+      buttonClicked: true,
+      totalValue: Number(totalValue) + Number(value),
+      id: Number(id) + 1,
+    });
+
+    // Agora, dispatch para atualizaçao do estado global
+    const { dispatchToAction } = this.props;
+    dispatchToAction(this.state);
   }
 
   render() {
@@ -47,7 +60,9 @@ class Wallet extends React.Component {
         <header>
           <p data-testid="email-field">{ email }</p>
 
-          <p data-testid="total-field"> { buttonClicked ? totalValue : '0' } </p>
+          <p data-testid="total-field">
+            { buttonClicked ? totalValue : '0' }
+          </p>
 
           <p data-testid="header-currency-field"> BRL </p>
         </header>
@@ -73,17 +88,32 @@ class Wallet extends React.Component {
 
           <label htmlFor="currency">
             Moeda:
-            <input
+            <select
               name="currency"
               data-testid="currency-input"
               onChange={ this.onInputChange }
-            />
+            >
+              <option value="USD" data-testid="USD"> USD </option>
+              <option value="CAD" data-testid="CAD"> CAD </option>
+              <option value="EUR" data-testid="EUR"> EUR </option>
+              <option value="GBP" data-testid="GBP"> GBP </option>
+              <option value="ARS" data-testid="ARS"> ARS </option>
+              <option value="BTC" data-testid="BTC"> BTC </option>
+              <option value="LTC" data-testid="LTC"> LTC </option>
+              <option value="JPY" data-testid="JPY"> JPY </option>
+              <option value="CHF" data-testid="CHF"> CHF </option>
+              <option value="AUD" data-testid="AUD"> AUD </option>
+              <option value="CNY" data-testid="CNY"> CNY </option>
+              <option value="ILS" data-testid="ILS"> ILS </option>
+              <option value="ETH" data-testid="ETH"> ETH </option>
+              <option value="XRP" data-testid="XRP"> XRP </option>
+            </select>
           </label>
 
           <label htmlFor="method">
             Pagamento:
-            <select 
-              name="method" 
+            <select
+              name="method"
               data-testid="method-input"
               onChange={ this.onInputChange }
             >
@@ -95,8 +125,8 @@ class Wallet extends React.Component {
 
           <label htmlFor="tag">
             Categoria:
-            <select 
-              name="tag" 
+            <select
+              name="tag"
               data-testid="tag-input"
               onChange={ this.onInputChange }
             >
@@ -122,10 +152,17 @@ class Wallet extends React.Component {
 
 Wallet.propTypes = {
   userEmail: PropTypes.shape({ email: PropTypes.string.isRequired }).isRequired,
+  dispatchToAction: PropTypes.func.isRequired,
+  dispatchToFetch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   userEmail: state.user,
 });
 
-export default connect(mapStateToProps, null)(Wallet);
+const mapDispatchToProps = (dispatch) => ({
+  dispatchToAction: (state) => dispatch(walletAction(state)),
+  dispatchToFetch: () => dispatch(fetchCurrency()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Wallet);
