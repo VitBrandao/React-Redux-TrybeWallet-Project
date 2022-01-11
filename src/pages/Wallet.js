@@ -39,10 +39,12 @@ class Wallet extends React.Component {
   addExpense() {
     // Primeiro, atualizando valor total
     const { value, totalValue, id } = this.state;
+    // const { fetchResults } = this.props;
     this.setState({
       buttonClicked: true,
       totalValue: Number(totalValue) + Number(value),
       id: Number(id) + 1,
+      // exchangeRates: fetchResults,
     });
 
     // Agora, dispatch para atualizaçao do estado global
@@ -53,6 +55,8 @@ class Wallet extends React.Component {
   render() {
     const { userEmail: { email } } = this.props;
     const { totalValue, buttonClicked } = this.state;
+    // const { fetchResults } = this.props;
+
     return (
       <div>
         <div>TrybeWallet</div>
