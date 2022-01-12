@@ -1,6 +1,7 @@
 import { ADD_INFORMATION } from '../reducers/user';
 import { ADD_EXPENSES } from '../reducers/wallet';
 import { ADD_OPTIONS } from '../reducers/wallet';
+import { REQUEST_FETCH } from '../reducers/wallet'
 
 export const userAction = (payload) => ({
   type: ADD_INFORMATION,
@@ -17,8 +18,13 @@ export const optionsAction = (payload) => ({
   payload
 })
 
+export const isFetchingAction = () => ({
+  type: REQUEST_FETCH, 
+})
+
 export function fetchCurrency(payload) {
   return (dispatch) => {
+    dispatch(isFetchingAction());
     return fetch('https://economia.awesomeapi.com.br/json/all')
       .then((response) => response.json())
       .then((data) => dispatch(walletAction({ ...payload, exchangeRates: data })))

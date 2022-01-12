@@ -26,8 +26,11 @@ class Wallet extends React.Component {
     fetchOptions(); // preenchendo 'currencies' com keys da API
   }
 
+  // Função para atualizar valor total após clique do botão
   getTotalValue() {
-    return 'entrou!';
+    const { exchangeRatesAPI:{ exchangeRates, value, currency } } = this.props;
+  
+    return (Number(value)*Number(exchangeRates[currency].ask));
   }
 
   // Função para salvar estados locais
@@ -57,8 +60,9 @@ class Wallet extends React.Component {
     const { userEmail: { email } } = this.props;
     const { exchangeRatesAPI, currenciesOptions } = this.props;
     // console.log(exchangeRatesAPI);
-  
+    const { isFetching } = this.props;
     return (
+      isFetching ? <span>Loading...</span> : 
       <div>
         <div>TrybeWallet</div>
 
@@ -161,6 +165,7 @@ const mapStateToProps = (state) => ({
   userEmail: state.user,
   exchangeRatesAPI: state.wallet.expenses[0],
   currenciesOptions: state.wallet.currencies,
+  isFetching: state.wallet.isFetching,
 });
 
 const mapDispatchToProps = (dispatch) => ({
