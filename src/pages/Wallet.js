@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { fetchCurrency, walletAction } from '../actions';
+import { fetchCurrency, fetchOptions, walletAction } from '../actions';
 
 class Wallet extends React.Component {
   constructor() {
@@ -14,20 +14,23 @@ class Wallet extends React.Component {
       method: '',
       tag: '',
       exchangeRates: '',
-      buttonClicked: false,
-      totalValue: 0,
     };
 
     this.addExpense = this.addExpense.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
+    this.getTotalValue = this.getTotalValue.bind(this);
   }
 
-  // componentDidMount() {
-  //   const { dispatchToFetch } = this.props;
-  //   const fetchResults = dispatchToFetch();
-  //   console.log(fetchResults);
-  // }
+  componentDidMount() {
+    const { fetchOptions } = this.props;
+    fetchOptions(); // preenchendo 'currencies' com keys da API
+  }
 
+  getTotalValue() {
+    return 'entrou!';
+  }
+
+  // Função para salvar estados locais
   onInputChange({ target }) {
     const { name, value } = target;
     this.setState({
@@ -37,26 +40,24 @@ class Wallet extends React.Component {
 
   // Funçao do clique do botão
   addExpense() {
-    // Primeiro, atualizando valor total
-    const { value, totalValue, id } = this.state;
-    // const { fetchResults } = this.props;
+    // Primeiro, atualizando o id
+    const { id } = this.state;
     this.setState({
-      buttonClicked: true,
-      totalValue: Number(totalValue) + Number(value),
       id: Number(id) + 1,
-      // exchangeRates: fetchResults,
     });
 
     // Agora, dispatch para atualizaçao do estado global
     const { dispatchToFetch } = this.props;
     dispatchToFetch(this.state);
+    // const { exchangeRatesAPI } = this.props;
+    // console.log(exchangeRatesAPI);
   }
 
   render() {
     const { userEmail: { email } } = this.props;
-    const { totalValue, buttonClicked } = this.state;
-    // const { fetchResults } = this.props;
-
+    const { exchangeRatesAPI, currenciesOptions } = this.props;
+    // console.log(exchangeRatesAPI);
+  
     return (
       <div>
         <div>TrybeWallet</div>
@@ -64,9 +65,7 @@ class Wallet extends React.Component {
         <header>
           <p data-testid="email-field">{ email }</p>
 
-          <p data-testid="total-field">
-            { buttonClicked ? totalValue : '0' }
-          </p>
+          <p data-testid="total-field"> {exchangeRatesAPI ? this.getTotalValue() : '0'} </p>
 
           <p data-testid="header-currency-field"> BRL </p>
         </header>
@@ -97,20 +96,18 @@ class Wallet extends React.Component {
               data-testid="currency-input"
               onChange={ this.onInputChange }
             >
-              <option value="USD" data-testid="USD"> USD </option>
-              <option value="CAD" data-testid="CAD"> CAD </option>
-              <option value="EUR" data-testid="EUR"> EUR </option>
-              <option value="GBP" data-testid="GBP"> GBP </option>
-              <option value="ARS" data-testid="ARS"> ARS </option>
-              <option value="BTC" data-testid="BTC"> BTC </option>
-              <option value="LTC" data-testid="LTC"> LTC </option>
-              <option value="JPY" data-testid="JPY"> JPY </option>
-              <option value="CHF" data-testid="CHF"> CHF </option>
-              <option value="AUD" data-testid="AUD"> AUD </option>
-              <option value="CNY" data-testid="CNY"> CNY </option>
-              <option value="ILS" data-testid="ILS"> ILS </option>
-              <option value="ETH" data-testid="ETH"> ETH </option>
-              <option value="XRP" data-testid="XRP"> XRP </option>
+              {currenciesOptions.map((coin, index) => {
+                if (index !== 1 && index !== 15) {
+                  return (
+                    <option
+                      key={index}
+                      value={coin}
+                      data-testid={coin}
+                    >
+                      {coin}
+                    </option>)
+                }})
+              }
             </select>
           </label>
 
@@ -162,11 +159,14 @@ Wallet.propTypes = {
 
 const mapStateToProps = (state) => ({
   userEmail: state.user,
+  exchangeRatesAPI: state.wallet.expenses[0],
+  currenciesOptions: state.wallet.currencies,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   dispatchToAction: (state) => dispatch(walletAction(state)),
   dispatchToFetch: (state) => dispatch(fetchCurrency(state)),
+  fetchOptions: ()  => dispatch(fetchOptions())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet);

@@ -205,7 +205,7 @@ describe.only('5 - Implemente a lógica para preencher as opções do campo "Moe
     const coinOptionsValues = coinOptions.map((coinOption) => coinOption.value);
 
     const expectedCoinOptions = [
-      'USD', 'CAD', 'EUR', 'GBP', 'ARS', 'BTC', 'LTC',
+      'USD', 'CAD', 'GBP', 'ARS', 'BTC', 'LTC', 'EUR',
       'JPY', 'CHF', 'AUD', 'CNY', 'ILS', 'ETH', 'XRP',
     ];
 

@@ -1,5 +1,5 @@
 export const ADD_EXPENSES = 'ADD_EXPENSES';
-export const ADD_EXCHANGE = 'ADD_EXCHANGE';
+export const ADD_OPTIONS = 'ADD_OPTIONS';
 
 const INITIAL_STATE = {
   currencies: [],
@@ -9,7 +9,9 @@ const INITIAL_STATE = {
 export const wallet = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case ADD_EXPENSES:
-    return { ...state, expenses: [...state.expenses, { ...action.payload }] };
+    return { ...state, expenses: [...state.expenses, action.payload ] };
+  case ADD_OPTIONS:
+    return {...state, currencies: Object.keys(action.payload)};  
   default:
     return state;
   }
