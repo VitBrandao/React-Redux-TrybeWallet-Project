@@ -1,7 +1,5 @@
 import { ADD_INFORMATION } from '../reducers/user';
-import { ADD_EXPENSES } from '../reducers/wallet';
-import { ADD_OPTIONS } from '../reducers/wallet';
-import { REQUEST_FETCH } from '../reducers/wallet'
+import { ADD_EXPENSES, ADD_OPTIONS, REQUEST_FETCH } from '../reducers/wallet';
 
 export const userAction = (payload) => ({
   type: ADD_INFORMATION,
@@ -15,12 +13,12 @@ export const walletAction = (payload) => ({
 
 export const optionsAction = (payload) => ({
   type: ADD_OPTIONS,
-  payload
-})
+  payload,
+});
 
 export const isFetchingAction = () => ({
-  type: REQUEST_FETCH, 
-})
+  type: REQUEST_FETCH,
+});
 
 export function fetchCurrency(payload) {
   return (dispatch) => {
@@ -28,7 +26,7 @@ export function fetchCurrency(payload) {
     return fetch('https://economia.awesomeapi.com.br/json/all')
       .then((response) => response.json())
       .then((data) => dispatch(walletAction({ ...payload, exchangeRates: data })))
-      .catch((error) => console.log(error))
+      .catch((error) => console.log(error));
   };
 }
 
@@ -37,6 +35,6 @@ export function fetchOptions() {
     return fetch('https://economia.awesomeapi.com.br/json/all')
       .then((response) => response.json())
       .then((data) => dispatch(optionsAction(data)))
-      .catch((error) => console.log(error))
+      .catch((error) => console.log(error));
   };
 }

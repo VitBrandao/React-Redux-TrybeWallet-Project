@@ -11,11 +11,11 @@ const INITIAL_STATE = {
 export const wallet = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case ADD_EXPENSES:
-    return { ...state, expenses: [...state.expenses, action.payload ], isFetching: false };
+    return { ...state, expenses: [...state.expenses, action.payload], isFetching: false };
   case ADD_OPTIONS:
-    return {...state, currencies: Object.keys(action.payload)};  
+    return { ...state, currencies: Object.keys(action.payload) };
   case REQUEST_FETCH:
-    return {...state, isFetching: true}  
+    return { ...state, isFetching: true };
   default:
     return state;
   }
