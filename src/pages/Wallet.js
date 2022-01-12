@@ -22,11 +22,11 @@ class Wallet extends React.Component {
     this.onInputChange = this.onInputChange.bind(this);
   }
 
-  componentDidMount() {
-    const { dispatchToFetch } = this.props;
-    const fetchResults = dispatchToFetch();
-    console.log(fetchResults);
-  }
+  // componentDidMount() {
+  //   const { dispatchToFetch } = this.props;
+  //   const fetchResults = dispatchToFetch();
+  //   console.log(fetchResults);
+  // }
 
   onInputChange({ target }) {
     const { name, value } = target;
@@ -48,8 +48,8 @@ class Wallet extends React.Component {
     });
 
     // Agora, dispatch para atualizaçao do estado global
-    const { dispatchToAction } = this.props;
-    dispatchToAction(this.state);
+    const { dispatchToFetch } = this.props;
+    dispatchToFetch(this.state);
   }
 
   render() {
@@ -166,7 +166,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   dispatchToAction: (state) => dispatch(walletAction(state)),
-  dispatchToFetch: () => dispatch(fetchCurrency()),
+  dispatchToFetch: (state) => dispatch(fetchCurrency(state)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet);

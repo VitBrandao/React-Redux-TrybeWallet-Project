@@ -1,5 +1,5 @@
 import { ADD_INFORMATION } from '../reducers/user';
-import { ADD_EXPENSES, ADD_EXCHANGE } from '../reducers/wallet';
+import { ADD_EXPENSES } from '../reducers/wallet';
 
 export const userAction = (payload) => ({
   type: ADD_INFORMATION,
@@ -11,15 +11,10 @@ export const walletAction = (payload) => ({
   payload,
 });
 
-export const fetchAction = (payload) => ({
-  type: ADD_EXCHANGE,
-  payload,
-});
-
-export function fetchCurrency() {
+export function fetchCurrency(payload) {
   return (dispatch) => {
     return fetch('https://economia.awesomeapi.com.br/json/all')
       .then((response) => response.json())
-      .then((data) => dispatch(fetchAction(data)));
+      .then((data) => dispatch(walletAction({ ...payload, exchangeRates: data })));
   };
 }

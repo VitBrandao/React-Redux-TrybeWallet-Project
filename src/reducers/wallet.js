@@ -3,23 +3,13 @@ export const ADD_EXCHANGE = 'ADD_EXCHANGE';
 
 const INITIAL_STATE = {
   currencies: [],
-  expenses: [{
-    id: '',
-    value: '',
-    description: '',
-    currency: '',
-    method: '',
-    tag: '',
-    exchangeRates: '',
-  }],
+  expenses: [],
 };
 
 export const wallet = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case ADD_EXPENSES:
     return { ...state, expenses: [...state.expenses, { ...action.payload }] };
-  case ADD_EXCHANGE:
-    return { expenses: [{ ...state.expenses, api: action.payload }] };
   default:
     return state;
   }
