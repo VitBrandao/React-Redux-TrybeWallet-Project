@@ -8,7 +8,7 @@ class Wallet extends React.Component {
     super();
     this.state = {
       id: 0,
-      value: '0',
+      value: 0,
       description: '',
       currency: '',
       method: '',
@@ -18,7 +18,7 @@ class Wallet extends React.Component {
 
     this.addExpense = this.addExpense.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
-    this.getTotalValue = this.getTotalValue.bind(this);
+    // this.getTotalValue = this.getTotalValue.bind(this);
   }
 
   componentDidMount() {
@@ -35,11 +35,11 @@ class Wallet extends React.Component {
   }
 
   // Função para atualizar valor total após clique do botão
-  getTotalValue() {
-    const { globalExpenses: { exchangeRates, value, currency } } = this.props;
+  // getTotalValue() {
+  //   const { globalExpenses: { exchangeRates, value, currency } } = this.props;
 
-    return (Number(value) * Number(exchangeRates[currency].ask));
-  }
+  //   return (Number(value) * Number(exchangeRates[currency].ask));
+  // }
 
   // Funçao do clique do botão
   addExpense() {
@@ -52,17 +52,20 @@ class Wallet extends React.Component {
     // Agora, dispatch para atualizaçao do estado global
     const { dispatchToFetch } = this.props;
     dispatchToFetch(this.state);
-    // const { globalExpenses } = this.props;
-    // console.log(globalExpenses);
+
+    this.setState({
+      value: '0',
+    });
   }
 
   render() {
     const { userEmail: { email } } = this.props;
-    const { globalExpenses, currenciesOptions } = this.props;
+    const { totalValue, currenciesOptions } = this.props;
+    const {value} = this.state;
     // console.log(globalExpenses);
-    const { isFetching } = this.props;
+    // const { isFetching } = this.props;
     return (
-      isFetching ? <span>Loading...</span> :
+      // isFetching ? <span>Loading...</span> :
         <div>
           <div>TrybeWallet</div>
 
@@ -70,7 +73,7 @@ class Wallet extends React.Component {
             <p data-testid="email-field">{email}</p>
 
             <p data-testid="total-field">
-              {globalExpenses ? this.getTotalValue() : '0'}
+              {totalValue ? totalValue : 0 }
             </p>
 
             <p data-testid="header-currency-field"> BRL </p>
@@ -81,8 +84,12 @@ class Wallet extends React.Component {
               Valor da despesa:
               <input
                 name="value"
+                id="value"
+                aria-label="value"
                 data-testid="value-input"
+                value={value}
                 onChange={ this.onInputChange }
+                type="number"
               />
             </label>
 
@@ -96,25 +103,22 @@ class Wallet extends React.Component {
             </label>
 
             <label htmlFor="currency">
-              Moeda:
+              Moeda
               <select
                 name="currency"
+                id="currency"
                 data-testid="currency-input"
                 onChange={ this.onInputChange }
+                aria-label="Moeda"
               >
-                {currenciesOptions.map((coin, index) => {
-                  const magicNumber = 15;
-                  if (index !== 1 && index !== magicNumber) {
-                    return (
+                {currenciesOptions.map((coin, index) => (
                       <option
                         key={ index }
-                        value={ coin }
-                        data-testid={ coin }
+                        value={ coin.code }
                       >
-                        {coin}
-                      </option>);
-                  }
-                })}
+                        {coin.code}
+                      </option>)
+                )}
               </select>
             </label>
 
@@ -122,11 +126,13 @@ class Wallet extends React.Component {
               Pagamento:
               <select
                 name="method"
+                id="method"
                 data-testid="method-input"
                 onChange={ this.onInputChange }
+                aria-label="method"
               >
                 <option value="Dinheiro"> Dinheiro </option>
-                <option value="Cartão de credito"> Cartão de crédito </option>
+                <option value="Cartão de crédito"> Cartão de crédito </option>
                 <option value="Cartão de débito"> Cartão de débito </option>
               </select>
             </label>
@@ -135,6 +141,8 @@ class Wallet extends React.Component {
               Categoria:
               <select
                 name="tag"
+                id="tag"
+                aria-label="tag"
                 data-testid="tag-input"
                 onChange={ this.onInputChange }
               >
@@ -166,9 +174,10 @@ Wallet.propTypes = {
 
 const mapStateToProps = (state) => ({
   userEmail: state.user,
-  globalExpenses: state.wallet.expenses[0],
+  globalExpenses: state.wallet.expenses,
   currenciesOptions: state.wallet.currencies,
   isFetching: state.wallet.isFetching,
+  totalValue: state.wallet.totalExpenses,
 });
 
 const mapDispatchToProps = (dispatch) => ({

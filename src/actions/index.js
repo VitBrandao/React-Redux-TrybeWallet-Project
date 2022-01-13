@@ -22,7 +22,6 @@ export const isFetchingAction = () => ({
 
 export function fetchCurrency(payload) {
   return (dispatch) => {
-    dispatch(isFetchingAction());
     return fetch('https://economia.awesomeapi.com.br/json/all')
       .then((response) => response.json())
       .then((data) => dispatch(walletAction({ ...payload, exchangeRates: data })))
@@ -32,6 +31,7 @@ export function fetchCurrency(payload) {
 
 export function fetchOptions() {
   return (dispatch) => {
+    // dispatch(isFetchingAction());
     return fetch('https://economia.awesomeapi.com.br/json/all')
       .then((response) => response.json())
       .then((data) => dispatch(optionsAction(data)))
