@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { fetchCurrency, fetchOptions, walletAction } from '../actions';
+import { fetchCurrency, fetchOptions } from '../actions';
 
 class Wallet extends React.Component {
   constructor() {
@@ -22,8 +22,9 @@ class Wallet extends React.Component {
   }
 
   componentDidMount() {
-    const { fetchOptions } = this.props;
-    fetchOptions(); // preenchendo 'currencies' com keys da API
+    const { fetchOptionsDispatch } = this.props;
+    fetchOptionsDispatch(); // preenchendo 'currencies' com keys da API
+    // walletAction() // tentativa de preencher o valor total na tela inicial
   }
 
   // Função para salvar estados locais
@@ -61,115 +62,117 @@ class Wallet extends React.Component {
   render() {
     const { userEmail: { email } } = this.props;
     const { totalValue, currenciesOptions } = this.props;
-    const {value} = this.state;
+    const { value } = this.state;
     // console.log(globalExpenses);
     // const { isFetching } = this.props;
     return (
       // isFetching ? <span>Loading...</span> :
-        <div>
-          <div>TrybeWallet</div>
+      <div>
+        <div>TrybeWallet</div>
 
-          <header>
-            <p data-testid="email-field">{email}</p>
+        <header>
+          <p data-testid="email-field">{ email }</p>
 
-            <p data-testid="total-field">
-              {totalValue ? totalValue : 0 }
-            </p>
+          <p data-testid="total-field">
+            { totalValue ? totalValue : 0 }
+          </p>
 
-            <p data-testid="header-currency-field"> BRL </p>
-          </header>
+          <p data-testid="header-currency-field"> BRL </p>
+        </header>
 
-          <form>
-            <label htmlFor="value">
-              Valor da despesa:
-              <input
-                name="value"
-                id="value"
-                aria-label="value"
-                data-testid="value-input"
-                value={value}
-                onChange={ this.onInputChange }
-                type="number"
-              />
-            </label>
+        <form>
+          <label htmlFor="value">
+            Valor da despesa:
+            <input
+              name="value"
+              id="value"
+              aria-label="value"
+              data-testid="value-input"
+              value={ value }
+              onChange={ this.onInputChange }
+              type="number"
+            />
+          </label>
 
-            <label htmlFor="description">
-              Descrição:
-              <input
-                name="description"
-                data-testid="description-input"
-                onChange={ this.onInputChange }
-              />
-            </label>
+          <label htmlFor="description">
+            Descrição:
+            <input
+              name="description"
+              data-testid="description-input"
+              onChange={ this.onInputChange }
+            />
+          </label>
 
-            <label htmlFor="currency">
-              Moeda
-              <select
-                name="currency"
-                id="currency"
-                data-testid="currency-input"
-                onChange={ this.onInputChange }
-                aria-label="Moeda"
-              >
-                {currenciesOptions.map((coin, index) => (
-                      <option
-                        key={ index }
-                        value={ coin.code }
-                      >
-                        {coin.code}
-                      </option>)
-                )}
-              </select>
-            </label>
-
-            <label htmlFor="method">
-              Pagamento:
-              <select
-                name="method"
-                id="method"
-                data-testid="method-input"
-                onChange={ this.onInputChange }
-                aria-label="method"
-              >
-                <option value="Dinheiro"> Dinheiro </option>
-                <option value="Cartão de crédito"> Cartão de crédito </option>
-                <option value="Cartão de débito"> Cartão de débito </option>
-              </select>
-            </label>
-
-            <label htmlFor="tag">
-              Categoria:
-              <select
-                name="tag"
-                id="tag"
-                aria-label="tag"
-                data-testid="tag-input"
-                onChange={ this.onInputChange }
-              >
-                <option value="Alimentação"> Alimentação </option>
-                <option value="Lazer"> Lazer </option>
-                <option value="Trabalho"> Trabalho </option>
-                <option value="Transporte"> Transporte </option>
-                <option value="Saúde"> Saúde </option>
-              </select>
-            </label>
-
-            <button
-              type="button"
-              onClick={ this.addExpense }
+          <label htmlFor="currency">
+            Moeda
+            <select
+              name="currency"
+              id="currency"
+              data-testid="currency-input"
+              onChange={ this.onInputChange }
+              aria-label="Moeda"
             >
-              Adicionar despesa
-            </button>
-          </form>
-        </div>
+              {currenciesOptions.map((coin, index) => (
+                <option
+                  key={ index }
+                  value={ coin.code }
+                >
+                  { coin.code }
+                </option>))}
+              ,
+            </select>
+          </label>
+
+          <label htmlFor="method">
+            Pagamento:
+            <select
+              name="method"
+              id="method"
+              data-testid="method-input"
+              onChange={ this.onInputChange }
+              aria-label="method"
+            >
+              <option value="Dinheiro"> Dinheiro </option>
+              <option value="Cartão de crédito"> Cartão de crédito </option>
+              <option value="Cartão de débito"> Cartão de débito </option>
+            </select>
+          </label>
+
+          <label htmlFor="tag">
+            Categoria:
+            <select
+              name="tag"
+              id="tag"
+              aria-label="tag"
+              data-testid="tag-input"
+              onChange={ this.onInputChange }
+            >
+              <option value="Alimentação"> Alimentação </option>
+              <option value="Lazer"> Lazer </option>
+              <option value="Trabalho"> Trabalho </option>
+              <option value="Transporte"> Transporte </option>
+              <option value="Saúde"> Saúde </option>
+            </select>
+          </label>
+
+          <button
+            type="button"
+            onClick={ this.addExpense }
+          >
+            Adicionar despesa
+          </button>
+        </form>
+      </div>
     );
   }
 }
 
 Wallet.propTypes = {
   userEmail: PropTypes.shape({ email: PropTypes.string.isRequired }).isRequired,
-  // dispatchToAction: PropTypes.func.isRequired,
   dispatchToFetch: PropTypes.func.isRequired,
+  fetchOptionsDispatch: PropTypes.func.isRequired,
+  totalValue: PropTypes.string.isRequired,
+  currenciesOptions: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -181,9 +184,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchToAction: (state) => dispatch(walletAction(state)),
   dispatchToFetch: (state) => dispatch(fetchCurrency(state)),
-  fetchOptions: () => dispatch(fetchOptions()),
+  fetchOptionsDispatch: () => dispatch(fetchOptions()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet);

@@ -21,20 +21,17 @@ export const isFetchingAction = () => ({
 });
 
 export function fetchCurrency(payload) {
-  return (dispatch) => {
-    return fetch('https://economia.awesomeapi.com.br/json/all')
-      .then((response) => response.json())
-      .then((data) => dispatch(walletAction({ ...payload, exchangeRates: data })))
-      .catch((error) => console.log(error));
-  };
+  return (dispatch) => (fetch('https://economia.awesomeapi.com.br/json/all')
+    .then((response) => response.json())
+    .then((data) => dispatch(walletAction({ ...payload, exchangeRates: data })))
+    .catch((error) => console.log(error))
+  );
 }
 
 export function fetchOptions() {
-  return (dispatch) => {
-    // dispatch(isFetchingAction());
-    return fetch('https://economia.awesomeapi.com.br/json/all')
-      .then((response) => response.json())
-      .then((data) => dispatch(optionsAction(data)))
-      .catch((error) => console.log(error));
-  };
+  return (dispatch) => (fetch('https://economia.awesomeapi.com.br/json/all')
+    .then((response) => response.json())
+    .then((data) => dispatch(optionsAction(data)))
+    .catch((error) => console.log(error))
+  );
 }
