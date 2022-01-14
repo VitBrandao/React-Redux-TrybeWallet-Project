@@ -18,13 +18,11 @@ class Wallet extends React.Component {
 
     this.addExpense = this.addExpense.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
-    // this.getTotalValue = this.getTotalValue.bind(this);
   }
 
   componentDidMount() {
     const { fetchOptionsDispatch } = this.props;
     fetchOptionsDispatch(); // preenchendo 'currencies' com keys da API
-    // walletAction() // tentativa de preencher o valor total na tela inicial
   }
 
   // Função para salvar estados locais
@@ -34,13 +32,6 @@ class Wallet extends React.Component {
       [name]: value,
     });
   }
-
-  // Função para atualizar valor total após clique do botão
-  // getTotalValue() {
-  //   const { globalExpenses: { exchangeRates, value, currency } } = this.props;
-
-  //   return (Number(value) * Number(exchangeRates[currency].ask));
-  // }
 
   // Funçao do clique do botão
   addExpense() {
@@ -63,10 +54,8 @@ class Wallet extends React.Component {
     const { userEmail: { email } } = this.props;
     const { totalValue, currenciesOptions } = this.props;
     const { value } = this.state;
-    // console.log(globalExpenses);
-    // const { isFetching } = this.props;
+
     return (
-      // isFetching ? <span>Loading...</span> :
       <div>
         <div>TrybeWallet</div>
 
@@ -74,7 +63,7 @@ class Wallet extends React.Component {
           <p data-testid="email-field">{ email }</p>
 
           <p data-testid="total-field">
-            { totalValue ? totalValue : 0 }
+            { totalValue === undefined ? 0 : totalValue }
           </p>
 
           <p data-testid="header-currency-field"> BRL </p>
