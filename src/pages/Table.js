@@ -8,9 +8,9 @@ class Table extends React.Component {
     console.log(globalExpenses);
     return (
       <div>
-        <table className="table">
+        <table>
           <thead>
-            <tr>
+            <tr className="tableHeader">
               <th> Descrição </th>
               <th> Tag </th>
               <th> Método de pagamento </th>
@@ -21,8 +21,56 @@ class Table extends React.Component {
               <th> Moeda de conversão </th>
               <th> Editar/Excluir </th>
             </tr>
-
           </thead>
+
+          <tbody>
+            {globalExpenses.map((item, index) => (
+              <tr key={ index }>
+                <td>
+                  {/* Descrição */}
+                  { item.description }
+                </td>
+
+                <td>
+                  {/* Tag */}
+                  { item.tag }
+                </td>
+
+                <td>
+                  {/* Método de Pagamento */}
+                  { item.method }
+                </td>
+
+                <td>
+                  {/* Valor */}
+                  { item.value }
+                </td>
+
+                <td>
+                  {/* Moeda */}
+                  { item.exchangeRates[item.currency].name.split('/')[0] }
+                </td>
+
+                <td>
+                  {/* Câmbio Utilizado */}
+                  { Number(item.exchangeRates[item.currency].ask).toFixed(2) }
+                </td>
+
+                <td>
+                  {/* Valor Convertido */}
+                  { (Number(item.value) * Number(item.exchangeRates[item.currency].ask))
+                    .toFixed(2) }
+                </td>
+
+                <td>
+                  {/* Moeda de Conversão */}
+                  Real
+                </td>
+
+                <td> Editar/Excluir </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     );
