@@ -164,7 +164,7 @@ Wallet.propTypes = {
   dispatchToFetch: PropTypes.func.isRequired,
   fetchOptionsDispatch: PropTypes.func.isRequired,
   totalValue: PropTypes.string.isRequired,
-  currenciesOptions: PropTypes.string.isRequired,
+  currenciesOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 const mapStateToProps = (state) => ({
